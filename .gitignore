@@ -2,6 +2,9 @@
 *.slo
 *.lo
 *.o
+*.ilk
+*.pdb
+*.exe
 
 # Compiled Dynamic libraries
 *.so
@@ -10,3 +13,12 @@
 *.lai
 *.la
 *.a
+
+# Visual Studio Build Files
+*.tlog
+*.obj
+*.manifest
+*.manifest.res
+*manifest.rc
+*.idb
+*.lastbuildstate
