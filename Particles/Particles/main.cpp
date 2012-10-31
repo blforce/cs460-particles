@@ -6,8 +6,8 @@
 #include <GL/freeglut.h>
 #define WINDOW_TITLE_PREFIX "CS460 Particles"
 
-int CurrentWidth = 720,
-	CurrentHeight = 480,
+int CurrentWidth = 1280,
+	CurrentHeight = 720,
 	WindowHandle = 0;
 
 void Initialize(int, char*[]);
