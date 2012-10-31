@@ -1,0 +1,17 @@
+﻿Build started 10/30/2012 8:57:45 PM.
+     1>Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "x64\Debug\Particles.unsuccessfulbuild".
+       ClCompile:
+         e:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TP /errorReport:prompt main.cpp
+         main.cpp
+     1>main.cpp(44): error C3861: 'glutInitContextVersion': identifier not found
+     1>main.cpp(45): error C2065: 'GLUT_FORWARD_COMPATIBLE' : undeclared identifier
+     1>main.cpp(45): error C3861: 'glutInitContextFlags': identifier not found
+     1>main.cpp(46): error C2065: 'GLUT_CORE_PROFILE' : undeclared identifier
+     1>main.cpp(46): error C3861: 'glutInitContextProfile': identifier not found
+     1>Done Building Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.46
