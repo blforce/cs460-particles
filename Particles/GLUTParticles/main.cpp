@@ -8,7 +8,17 @@
 
 
 void renderScene(void);
+void idleUpdate(void);
 void changeSize(int w, int h);
+double ElapsedMS(int startTime);
+
+int lastRenderTime = 0;
+int lastSpawnTime = 0;
+
+bool showReflection = false;
+
+double frameMS = 1.0 / TARGET_FPS;
+double spawnMS = 1.0 / SPAWN_PER_SECOND;
 
 int main(int argc, char **argv)
 {
@@ -20,21 +30,48 @@ int main(int argc, char **argv)
 	glutCreateWindow(WINDOW_TITLE);
 
 	glutDisplayFunc(renderScene);
-	glutIdleFunc(renderScene);
+	glutIdleFunc(idleUpdate);
 	glutReshapeFunc(changeSize);
 
-	gluLookAt(0.0f, -1.0f, -10.0f,
-			  0.0f, 0.0f, 0.0f,
+	gluLookAt(0.0f, 1.0f, 10.0f,
+			  0.0f, 1.0f, 0.0f,
 			  0.0f, 1.0f, 0.0f);
 
 
 	InitializeParticles();
+
 	
 
 	glutMainLoop();
 
 
 	return 1;
+}
+
+void idleUpdate(void)
+{
+
+	if( ElapsedMS(lastSpawnTime) >= spawnMS)
+	{
+		lastSpawnTime += (spawnMS * CLOCKS_PER_SEC);
+		ActivateParticles();
+	}
+
+	if( ElapsedMS(lastRenderTime) >= frameMS )
+	{
+		lastRenderTime = clock();
+
+		// Update all particle positions
+		AdjustParticles();
+
+		// Show the scene to the user
+		renderScene();
+	}
+}
+
+double ElapsedMS(int startTime)
+{
+	return (double)(clock() - startTime) / (double)CLOCKS_PER_SEC;
 }
 
 void changeSize(int w, int h) {
@@ -48,7 +85,7 @@ void changeSize(int w, int h) {
 	// Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);
 
-        // Reset Matrix
+    // Reset Matrix
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window
@@ -67,12 +104,29 @@ void renderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//glTranslatef(0.0f, 0.0f, -10.0f);
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
 
 
-	ActivateParticles();
-	AdjustParticles();
+	// Draw the floor plane
+	glBegin(GL_QUADS);
+		glColor4f(0.25f, 0.25f, 0.25f, 0.5f);
+		glVertex3f(-10.0f, 0.0f, 10.0f);
+		glVertex3f(10.0f, 0.0f, 10.0f);
+		glVertex3f(10.0f, 0.0f, -10.0f);
+		glVertex3f(-10.0f, 0.0f, -10.0f);
+	glEnd();
+
 	RenderParticles();
+
+
+	if(showReflection) {
+		glPushMatrix();
+			glScalef(1.0f, -1.0f, 1.0f);
+			RenderParticles();
+		glPopMatrix();
+	}
 
 	glutSwapBuffers();
 }
