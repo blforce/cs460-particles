@@ -3,6 +3,7 @@
 #include <gl/glut.h>
 
 #include "constants.h"
+#include <stdio.h>
 
 #include "Particle.h"
 
@@ -11,14 +12,18 @@ void renderScene(void);
 void idleUpdate(void);
 void changeSize(int w, int h);
 double ElapsedMS(int startTime);
+double Timespan(int startTime, int endTime);
 
 int lastRenderTime = 0;
 int lastSpawnTime = 0;
 
-bool showReflection = false;
+bool showReflection = true;
 
 double frameMS = 1.0 / TARGET_FPS;
 double spawnMS = 1.0 / SPAWN_PER_SECOND;
+
+int frames = 0;
+int fpsTime = 0;
 
 int main(int argc, char **argv)
 {
@@ -54,8 +59,8 @@ int main(int argc, char **argv)
 
 void idleUpdate(void)
 {
-
-	if( ElapsedMS(lastSpawnTime) >= spawnMS)
+	int currentTime = clock();
+	while( Timespan(lastSpawnTime, currentTime) >= spawnMS)
 	{
 		lastSpawnTime += (spawnMS * CLOCKS_PER_SEC);
 		ActivateParticles();
@@ -71,11 +76,27 @@ void idleUpdate(void)
 		// Show the scene to the user
 		renderScene();
 	}
+
+	// Update the FPS
+	if( ElapsedMS(fpsTime) >= 1.0 )
+	{
+		char title[256];
+		sprintf(title, "CS460 Particles - %d fps\0", frames);
+		glutSetWindowTitle(title);
+
+		fpsTime = clock();
+		frames = 0;
+	}
+}
+
+double Timespan(int startTime, int endTime)
+{
+	return (double)(endTime - startTime) / (double)CLOCKS_PER_SEC;
 }
 
 double ElapsedMS(int startTime)
 {
-	return (double)(clock() - startTime) / (double)CLOCKS_PER_SEC;
+	return Timespan(startTime, clock());
 }
 
 void changeSize(int w, int h) {
@@ -118,22 +139,24 @@ void renderScene(void)
 
 	// Draw the floor plane
 	glBegin(GL_QUADS);
-		glColor4f(0.25f, 0.25f, 0.25f, 0.5f);
+		glColor4f(0.0f, 0.1f, 0.1f, 0.5f);
 		glVertex3f(-10.0f, 0.0f, 10.0f);
 		glVertex3f(10.0f, 0.0f, 10.0f);
 		glVertex3f(10.0f, 0.0f, -10.0f);
 		glVertex3f(-10.0f, 0.0f, -10.0f);
 	glEnd();
 
-	RenderParticles();
+	RenderParticles(false);
 
 
 	if(showReflection) {
 		glPushMatrix();
 			glScalef(1.0f, -1.0f, 1.0f);
-			RenderParticles();
+			RenderParticles(true);
 		glPopMatrix();
 	}
 
 	glutSwapBuffers();
+
+	frames++;
 }

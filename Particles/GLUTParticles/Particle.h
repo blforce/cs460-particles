@@ -31,8 +31,6 @@ struct PARTICLE {
 
 typedef struct PARTICLE Particle;
 
-float bounceFactor = 0.45f;
-
 Vector gravity;
 Vector camera;
 
@@ -65,6 +63,18 @@ float RandomVelocity()
 	return (((float)((rand() % 100) + 1)) / 1000.0f) - 0.0f;
 }
 
+float Distance(Vector start, Vector end)
+{
+	return sqrt(pow(end.x - start.x, 2) + 
+				pow(end.y - start.y, 2) +
+				pow(end.z - start.z, 2));
+}
+
+float GetPointSize(Particle part)
+{
+	return part.Size * windowWidth / Distance(part.Position, camera);
+}
+
 
 void ActivateParticles()
 {
@@ -92,7 +102,7 @@ void ActivateParticles()
 			Particles[i].BirthColor.r = RandomValue(0.5f, 1.0f);
 			Particles[i].BirthColor.g = RandomValue(0.0f, 0.5f);
 			Particles[i].BirthColor.b = RandomValue(0.0f, 0.5f);
-			Particles[i].BirthColor.a = 0.0f;
+			Particles[i].BirthColor.a = 0.01f;
 
 			// Setup the death
 			Particles[i].DeathColor.r = RandomValue(0.0f, 0.5f);
@@ -112,6 +122,19 @@ void ActivateParticles()
 }
 
 
+
+
+
+
+void Swap(int index1, int index2)
+{
+	Particle temp = Particles[index1];
+
+	Particles[index1] = Particles[index2];
+	Particles[index2] = temp;
+}
+
+
 void AdjustParticles()
 {
 #pragma omp parallel for
@@ -128,13 +151,13 @@ void AdjustParticles()
 		Particles[i].Position.z += Particles[i].Velocity.z;
 
 		// Make the particle "bounce"
-		if(Particles[i].Position.y <= 0.0f)
+		if(Particles[i].Position.y <= PARTICLE_SIZE_MIN)
 		{
-			Particles[i].Velocity.x *= bounceFactor;
-			Particles[i].Velocity.y = 0.0f - Particles[i].Velocity.y * bounceFactor;
-			Particles[i].Velocity.z *= bounceFactor;
+			Particles[i].Velocity.x *= FLOOR_BOUNCE_FACTOR;
+			Particles[i].Velocity.y = 0.0f - Particles[i].Velocity.y * FLOOR_BOUNCE_FACTOR;
+			Particles[i].Velocity.z *= FLOOR_BOUNCE_FACTOR;
 
-			Particles[i].Position.y = 0.0f;
+			Particles[i].Position.y = PARTICLE_SIZE_MIN + Particles[i].Velocity.y;
 		}
 
 		// Advance the age, and make sure it isn't supposed to be dead
@@ -159,23 +182,13 @@ Color InterpolateColor(Particle part)
 	return tempColor;
 }
 
-float Distance(Vector start, Vector end)
-{
-	return sqrt(pow(end.x - start.x, 2) + 
-				pow(end.y - start.y, 2) +
-				pow(end.z - start.z, 2));
-}
 
-float GetPointSize(Particle part)
-{
-	return part.Size * windowWidth / Distance(part.Position, camera);
-}
 
-void RenderParticles()
-{
-	
 
-	
+
+void RenderParticles(bool reflection)
+{
+
 #pragma omp parallel for
 	for(int i = 0; i < PARTICLE_COUNT; i++ )
 	{
@@ -187,7 +200,11 @@ void RenderParticles()
 			glBegin(GL_POINTS);
 				// set the particle color
 				Color color = InterpolateColor(Particles[i]);
-				glColor4f(color.r, color.g, color.b, color.a);
+
+				if( reflection)
+					glColor4f(color.r, color.g, color.b, 0.9 );
+				else
+					glColor4f(color.r, color.g, color.b, color.a);
 
 				glVertex3f(Particles[i].Position.x,
 						   Particles[i].Position.y,
