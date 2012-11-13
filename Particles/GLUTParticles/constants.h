@@ -7,11 +7,11 @@
 
 #define MAX_PARTICLE_LIFE		90
 
-#define PARTICLE_SIZE_MAX		3.0f
-#define	PARTICLE_SIZE_MIN		1.0f
+#define PARTICLE_SIZE_MAX		0.03f
+#define	PARTICLE_SIZE_MIN		0.005f
 
-#define WINDOW_WIDTH			1280
-#define WINDOW_HEIGHT			720
+#define WINDOW_WIDTH			800
+#define WINDOW_HEIGHT			600
 
 #define WINDOW_TITLE			"CS460 Particles"
 

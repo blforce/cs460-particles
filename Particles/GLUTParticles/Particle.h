@@ -3,6 +3,7 @@
 #include "constants.h"
 #include <time.h>
 #include <omp.h>
+#include <math.h>
 
 
 typedef struct {
@@ -33,6 +34,9 @@ typedef struct PARTICLE Particle;
 float bounceFactor = 0.45f;
 
 Vector gravity;
+Vector camera;
+
+int windowWidth, windowHeight;
 
 void InitializeParticles()
 {
@@ -155,20 +159,33 @@ Color InterpolateColor(Particle part)
 	return tempColor;
 }
 
+float Distance(Vector start, Vector end)
+{
+	return sqrt(pow(end.x - start.x, 2) + 
+				pow(end.y - start.y, 2) +
+				pow(end.z - start.z, 2));
+}
+
+float GetPointSize(Particle part)
+{
+	return part.Size * windowWidth / Distance(part.Position, camera);
+}
+
 void RenderParticles()
 {
 	
 
 	
-
+#pragma omp parallel for
 	for(int i = 0; i < PARTICLE_COUNT; i++ )
 	{
 		if(Particles[i].Alive)
 		{
-			// set the particle color
+			// scale the particle as it gets closer and further from the camera
+			glPointSize(GetPointSize(Particles[i]));
 
-			glPointSize(Particles[i].Size);
 			glBegin(GL_POINTS);
+				// set the particle color
 				Color color = InterpolateColor(Particles[i]);
 				glColor4f(color.r, color.g, color.b, color.a);
 

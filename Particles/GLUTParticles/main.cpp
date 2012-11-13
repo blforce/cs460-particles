@@ -33,7 +33,11 @@ int main(int argc, char **argv)
 	glutIdleFunc(idleUpdate);
 	glutReshapeFunc(changeSize);
 
-	gluLookAt(0.0f, 1.0f, 10.0f,
+	camera.x = 0.0f;
+	camera.y = 1.0f;
+	camera.z = 10.0f;
+
+	gluLookAt(camera.x, camera.y, camera.z,
 			  0.0f, 1.0f, 0.0f,
 			  0.0f, 1.0f, 0.0f);
 
@@ -96,6 +100,9 @@ void changeSize(int w, int h) {
 
 	// Get Back to the Modelview
 	glMatrixMode(GL_MODELVIEW);
+
+	windowWidth = w;
+	windowHeight = h;
 }
 
 
