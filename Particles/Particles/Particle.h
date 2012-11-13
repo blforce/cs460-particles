@@ -1,3 +1,6 @@
+
+#include "constants.h"
+
 #pragma once
 class CParticle
 {
@@ -23,6 +26,6 @@ public:
 
 	// Public Functions
 	float getLifePercentage(void);
-	float* getColor(void);
+	void getColor(float*);
 };
 

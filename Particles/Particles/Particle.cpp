@@ -11,23 +11,23 @@ CParticle::CParticle(void)
 	LifeCurrent = 0.0f;
 	LifeMaximum = 1.0f;
 
-	Position[0] = 0.0f;
-	Position[1] = 0.0f;
-	Position[2] = 0.0f;
+	Position[X] = 0.0f;
+	Position[Y] = 0.0f;
+	Position[Z] = 0.0f;
 
-	Velocity[0] = 0.0f;
-	Velocity[1] = 0.0f;
-	Velocity[2] = 0.0f;
+	Velocity[X] = 0.0f;
+	Velocity[Y] = 0.0f;
+	Velocity[Z] = 0.0f;
 
-	ColorBirth[0] = 1.0f;
-	ColorBirth[1] = 1.0f;
-	ColorBirth[2] = 1.0f;
-	ColorBirth[3] = 1.0f;
+	ColorBirth[R] = 1.0f;
+	ColorBirth[G] = 1.0f;
+	ColorBirth[B] = 1.0f;
+	ColorBirth[A] = 1.0f;
 
-	ColorDeath[0] = 0.001f;
-	ColorDeath[1] = 0.001f;
-	ColorDeath[2] = 0.001f;
-	ColorDeath[3] = 1.0f;
+	ColorDeath[R] = 0.001f;
+	ColorDeath[G] = 0.001f;
+	ColorDeath[B] = 0.001f;
+	ColorDeath[A] = 1.0f;
 }
 
 
@@ -42,14 +42,12 @@ float CParticle::getLifePercentage(void)
 }
 
 // Linearly interpolate the color
-float* CParticle::getColor(void)
+void CParticle::getColor(float* color)
 {
-	float tempColor[4];
 	float factor = getLifePercentage();
 
-	// Interpolate each color value
-	for(int i=0; i < 4; i++)
-		tempColor[i] = ColorBirth[i] + (ColorDeath[i] - ColorBirth[i]) * factor;
-
-	return tempColor;
+	// Interpolate each color channel
+	for( int channel=R; channel <= A; channel++ )
+		color[channel] = ColorBirth[channel] 
+							+ (ColorDeath[channel] - ColorBirth[channel]) * factor;
 }

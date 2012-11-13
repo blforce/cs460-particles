@@ -1,19 +1,33 @@
 
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#define WINDOW_TITLE_PREFIX "CS460 Particles"
+#include <gl/glew.h>
+#include <gl/freeglut.h>
 
-int CurrentWidth = 1280,
-	CurrentHeight = 720,
+
+#include "constants.h"
+
+
+int CurrentWidth = WINDOW_WIDTH,
+	CurrentHeight = WINDOW_HEIGHT,
 	WindowHandle = 0;
+
+GLuint vertexbuffer;
+GLuint ShaderProgram;
 
 void Initialize(int, char*[]);
 void InitWindow(int, char*[]);
 void ResizeFunction(int, int);
 void RenderFunction(void);
+
+void RenderParticles(void);
+
+void SetupScene(void);
+
 
 int main(int argc, char* argv[])
 {
@@ -35,13 +49,15 @@ void Initialize(int argc, char* argv[])
 	);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	SetupScene();
 }
 
 void InitWindow(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	
-	glutInitContextVersion(4, 0);
+	glutInitContextVersion(3, 2);
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
@@ -79,6 +95,34 @@ void RenderFunction(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glTranslatef(0.0f, -1.0f, -10.0f);
+
+	RenderParticles();
+
+
 	glutSwapBuffers();
 	glutPostRedisplay();
+}
+
+
+void RenderParticles(void)
+{
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+
+	glBegin(GL_POINTS);
+
+		glVertex3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(0.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, 0.0f, 0.0f);
+
+	glEnd();
+
+}
+
+
+void SetupScene()
+{
+	
+
+
 }

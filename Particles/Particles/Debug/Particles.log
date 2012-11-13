@@ -1,4 +1,4 @@
-﻿Build started 10/30/2012 11:20:44 PM.
+﻿Build started 11/13/2012 8:18:50 AM.
      1>Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Particles.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -12,6 +12,7 @@
          Debug\Emitter.obj
          Debug\main.obj
          Debug\Particle.obj
+         Debug\Shader.obj
          Debug\Simulator.obj
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Particles.exe.embed.manifest" /manifest Debug\Particles.exe.intermediate.manifest
@@ -26,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.85
+Time Elapsed 00:00:00.47

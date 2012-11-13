@@ -1,17 +1,39 @@
-﻿Build started 10/30/2012 8:57:45 PM.
+﻿Build started 10/31/2012 8:26:49 AM.
      1>Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+     1>PrepareForBuild:
+         Creating directory "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\".
+       InitializeBuildStatus:
          Touching "x64\Debug\Particles.unsuccessfulbuild".
        ClCompile:
-         e:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TP /errorReport:prompt main.cpp
+         e:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TP /errorReport:prompt Particle.cpp main.cpp
          main.cpp
-     1>main.cpp(44): error C3861: 'glutInitContextVersion': identifier not found
-     1>main.cpp(45): error C2065: 'GLUT_FORWARD_COMPATIBLE' : undeclared identifier
-     1>main.cpp(45): error C3861: 'glutInitContextFlags': identifier not found
-     1>main.cpp(46): error C2065: 'GLUT_CORE_PROFILE' : undeclared identifier
-     1>main.cpp(46): error C3861: 'glutInitContextProfile': identifier not found
-     1>Done Building Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" (build target(s)) -- FAILED.
+         Particle.cpp
+     1>Particle.cpp(54): warning C4172: returning address of local variable or temporary
+         Generating Code...
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"x64\Debug\Particles.exe.embed.manifest.res" x64\Debug\Particles_manifest.rc 
+       Link:
+         e:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Debug\Particles.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"mainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.lib" /MACHINE:X64 x64\Debug\Particles.exe.embed.manifest.res
+         x64\Debug\Emitter.obj
+         x64\Debug\main.obj
+         x64\Debug\Particle.obj
+         x64\Debug\Simulator.obj
+         Particles.vcxproj -> C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"x64\Debug\Particles.exe.embed.manifest" /manifest x64\Debug\Particles.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"x64\Debug\Particles.exe.embed.manifest.res" x64\Debug\Particles_manifest.rc 
+       LinkEmbedManifest:
+         e:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Debug\Particles.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"mainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.lib" /MACHINE:X64 x64\Debug\Particles.exe.embed.manifest.res
+         x64\Debug\Emitter.obj
+         x64\Debug\main.obj
+         x64\Debug\Particle.obj
+         x64\Debug\Simulator.obj
+         Particles.vcxproj -> C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\x64\Debug\Particles.exe
+       FinalizeBuildStatus:
+         Deleting file "x64\Debug\Particles.unsuccessfulbuild".
+         Touching "x64\Debug\Particles.lastbuildstate".
+     1>Done Building Project "C:\Users\Ben-Dev\Documents\Visual Studio 2010\Projects\OpenGLParticles\cs460-particles\Particles\Particles\Particles.vcxproj" (build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:00.46
+Time Elapsed 00:00:07.03
