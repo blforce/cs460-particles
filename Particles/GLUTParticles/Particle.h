@@ -1,219 +1,42 @@
+#ifndef PARTICLE_H
+#define	PARTICLE_H
 
 
-#include "constants.h"
-#include <time.h>
-#include <omp.h>
-#include <math.h>
+#include "CustomMath.h"
+#include "Environment.h"
 
-
-typedef struct {
-	float x, y, z;
-} Vector;
-
-typedef struct {
-	float r, g, b, a;
-} Color;
-
-struct PARTICLE {
-
-	Vector	Position;		// Current position
-	Vector	Velocity;		// Velocity
-	Color	BirthColor;		// Color when the particle is created
-	Color	DeathColor;		// Color when the particle is destroyed
-
-	float	Size;			// Particle size
-
-	bool	Alive;			// Is this particle alive?
-	int		CurrentLife;	// How many frames has this particle been alive?
-	int		MaximumLife;	// How many frames should this particle live?
-
-} Particles[PARTICLE_COUNT];
-
-typedef struct PARTICLE Particle;
-
-Vector gravity;
-Vector camera;
-
-int windowWidth, windowHeight;
-
-void InitializeParticles()
+class CParticle
 {
-	srand((int)time(NULL));
-
-	gravity.x = 0.0f;
-	gravity.y = -0.002f;
-	gravity.z = 0.0f;
-
-	int i;
-
-#pragma omp parallel for
-	for( i=0; i < PARTICLE_COUNT; i++ )
-		Particles[i].Alive = false;
-}
-
-float RandomValue(float min, float max)
-{
-	float random = ((float) rand()) / (float) RAND_MAX;
-
-	return (random * (max - min)) + min;
-}
-
-float RandomVelocity()
-{
-	return (((float)((rand() % 100) + 1)) / 1000.0f) - 0.0f;
-}
-
-float Distance(Vector start, Vector end)
-{
-	return sqrt(pow(end.x - start.x, 2) + 
-				pow(end.y - start.y, 2) +
-				pow(end.z - start.z, 2));
-}
-
-float GetPointSize(Particle part)
-{
-	return part.Size * windowWidth / Distance(part.Position, camera);
-}
+public:
+	CParticle(void);
+	~CParticle(void);
 
 
-void ActivateParticles()
-{
-	for(int i = 0; i < PARTICLE_COUNT; i++ )
-	{
-		// Revive dead particles
-		if(!Particles[i].Alive)
-		{
-			// Initialize a starting position
-			Particles[i].Position.x = RandomValue(-0.1, 0.1);
-			Particles[i].Position.y = 0.0f;
-			Particles[i].Position.z = RandomValue(-0.1, 0.1);
+	void	Activate(void);
+	void	Render(CEnvironment *env, Vector camera, int time);
 
-
-			// Give the particle a random velocity
-			Particles[i].Velocity.x = RandomValue(-0.05f, 0.05f);
-			Particles[i].Velocity.y = RandomValue(0.05f, 0.1f);
-			Particles[i].Velocity.z = RandomValue(-0.05f, 0.05f);
-
-			// Create a random particle size
-			Particles[i].Size = RandomValue(PARTICLE_SIZE_MIN, PARTICLE_SIZE_MAX);
-
-
-			// Setup the birth color
-			Particles[i].BirthColor.r = RandomValue(0.5f, 1.0f);
-			Particles[i].BirthColor.g = RandomValue(0.0f, 0.5f);
-			Particles[i].BirthColor.b = RandomValue(0.0f, 0.5f);
-			Particles[i].BirthColor.a = 0.01f;
-
-			// Setup the death
-			Particles[i].DeathColor.r = RandomValue(0.0f, 0.5f);
-			Particles[i].DeathColor.g = RandomValue(0.0f, 0.5f);
-			Particles[i].DeathColor.b = RandomValue(0.5f, 1.0f);
-			Particles[i].DeathColor.a = 0.75f;
-
-			// Make the particle alive
-			Particles[i].Alive = true;
-			Particles[i].CurrentLife = 0;
-			Particles[i].MaximumLife = MAX_PARTICLE_LIFE;
-
-			// Don't activate them all at once!
-			return;
-		}
-	}
-}
-
-
-
-
-
-
-void Swap(int index1, int index2)
-{
-	Particle temp = Particles[index1];
-
-	Particles[index1] = Particles[index2];
-	Particles[index2] = temp;
-}
-
-
-void AdjustParticles()
-{
-#pragma omp parallel for
-	for( int i = 0; i < PARTICLE_COUNT; i++ )
-	{
-		// Adjust the particle velocity
-		Particles[i].Velocity.x += gravity.x;
-		Particles[i].Velocity.y += gravity.y;
-		Particles[i].Velocity.z += gravity.z;
-
-		// Adjust the particle position
-		Particles[i].Position.x += Particles[i].Velocity.x;
-		Particles[i].Position.y += Particles[i].Velocity.y;
-		Particles[i].Position.z += Particles[i].Velocity.z;
-
-		// Make the particle "bounce"
-		if(Particles[i].Position.y <= PARTICLE_SIZE_MIN)
-		{
-			Particles[i].Velocity.x *= FLOOR_BOUNCE_FACTOR;
-			Particles[i].Velocity.y = 0.0f - Particles[i].Velocity.y * FLOOR_BOUNCE_FACTOR;
-			Particles[i].Velocity.z *= FLOOR_BOUNCE_FACTOR;
-
-			Particles[i].Position.y = PARTICLE_SIZE_MIN + Particles[i].Velocity.y;
-		}
-
-		// Advance the age, and make sure it isn't supposed to be dead
-		Particles[i].CurrentLife++;
-		if(Particles[i].CurrentLife > Particles[i].MaximumLife)
-			Particles[i].Alive = false;
-	}
-}
-
-
-Color InterpolateColor(Particle part)
-{
-	float ratio = (float)part.CurrentLife / (float)part.MaximumLife;
-
-	Color tempColor;
-
-	tempColor.r = part.BirthColor.r + (part.DeathColor.r - part.BirthColor.r) * ratio;
-	tempColor.g = part.BirthColor.g + (part.DeathColor.g - part.BirthColor.g) * ratio;
-	tempColor.b = part.BirthColor.b + (part.DeathColor.b - part.BirthColor.b) * ratio;
-	tempColor.a = part.BirthColor.a + (part.DeathColor.a - part.BirthColor.a) * ratio;
-
-	return tempColor;
-}
-
-
-
-
-
-void RenderParticles(bool reflection)
-{
-
-#pragma omp parallel for
-	for(int i = 0; i < PARTICLE_COUNT; i++ )
-	{
-		if(Particles[i].Alive)
-		{
-			// scale the particle as it gets closer and further from the camera
-			glPointSize(GetPointSize(Particles[i]));
-
-			glBegin(GL_POINTS);
-				// set the particle color
-				Color color = InterpolateColor(Particles[i]);
-
-				if( reflection)
-					glColor4f(color.r, color.g, color.b, 0.9 );
-				else
-					glColor4f(color.r, color.g, color.b, color.a);
-
-				glVertex3f(Particles[i].Position.x,
-						   Particles[i].Position.y,
-						   Particles[i].Position.z);
-
-			glEnd();
-		}
-
-	}
+	bool	isAlive(void);
 
 	
-}
+
+private:
+	bool	Alive;
+
+	Color	BirthColor;
+	Color	DeathColor;
+
+	Vector	Position;
+	Vector	Velocity;
+	float	Size;
+
+	int		BirthTime;
+	int		LifeTime;
+
+	Color	getColor(int time);
+	Vector	getPosition(CEnvironment *env, int time);
+	float	getSize(CEnvironment *env, Vector camera);
+
+	float	dT(int time)	{ return Math::dT(BirthTime, time); }
+};
+
+#endif
