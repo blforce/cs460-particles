@@ -2,6 +2,8 @@
 #include <FL/gl.h>
 #include "Particle.h"
 
+#include "ParticleSystem.h"
+
 #pragma comment(lib, "fltkgld.lib")
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
@@ -33,8 +35,12 @@ bool CParticle::isAlive(void)
 }
 
 
-void CParticle::Activate(void)
+void CParticle::Activate(void *data)
 {
+
+	CParticleSystem* system = reinterpret_cast<CParticleSystem*>(data);
+
+
 	// Initialize a starting position
 	Position.x = Math::RandomValue(-0.1f, 0.1f);
 	Position.y = Math::RandomValue(0.01f, 0.1f);
@@ -47,8 +53,9 @@ void CParticle::Activate(void)
 	Velocity.z = Math::RandomValue(-1.0f, 1.0f);
 
 	// Create a random particle size
-	Size = Math::RandomValue(PARTICLE_SIZE_MIN, PARTICLE_SIZE_MAX);
-	//Size = PARTICLE_SIZE_MAX;
+	double var = ((system->ParticleSize / 100) * system->ParticleSizeVar);
+	Size = Math::RandomValue(system->ParticleSize - var, 
+							 system->ParticleSize + var) / particleSize;
 
 	// Setup the birth color
 	BirthColor.r = Math::RandomValue(0.0f, 0.0f);
@@ -65,7 +72,7 @@ void CParticle::Activate(void)
 	// Make the particle alive
 	Alive = true;
 	BirthTime = clock();
-	LifeTime = (MAX_PARTICLE_LIFE * CLOCKS_PER_SEC);
+	LifeTime = system->MaximumParticleLife * CLOCKS_PER_SEC;
 }
 
 

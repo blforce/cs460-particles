@@ -15,6 +15,8 @@
 #include "ParticleSystem.h"
 #include "Environment.h"
 
+#include "SliderInput.h"
+
 
 void IdleCallback(void* pData);
 
@@ -110,13 +112,13 @@ class MyGlWindow : public Fl_Gl_Window {
 			  0.0f, 1.0f, 0.0f);
 
 	
-		env = CEnvironment(w);
+		env.windowWidth = w;
 
         redraw();
     }
 
 
-private:
+public:
 	CParticleSystem particles;
 	CEnvironment env;
 	Vector camera;
@@ -161,11 +163,28 @@ int main() {
 	srand((int)time(NULL));
 
 
-     Fl_Window win(WINDOW_WIDTH, 
+     Fl_Window win(WINDOW_WIDTH + CONTROL_PANEL_WIDTH, 
 					WINDOW_HEIGHT, 
 					WINDOW_TITLE);
 
-     MyGlWindow mygl(10, 10, win.w()-20, win.h()-20);
+     MyGlWindow mygl(0, 
+					 0, 
+					 win.w()-CONTROL_PANEL_WIDTH, 
+					 win.h());
+
+	 SliderInput sBirthRate(win.w() - CONTROL_PANEL_WIDTH + 2, 2, CONTROL_PANEL_WIDTH - 4, 20, &mygl.particles.BirthRate, "Birth Rate (per second)");
+	 sBirthRate.bounds(0, 500);
+
+	 SliderInput sMaxLife(win.w() - CONTROL_PANEL_WIDTH + 2, 42, CONTROL_PANEL_WIDTH - 4, 20, &mygl.particles.MaximumParticleLife, "Max Particle Life (seconds)");
+	 sMaxLife.bounds(0, 10);
+
+
+	 SliderInput sParticleSize(win.w() - CONTROL_PANEL_WIDTH + 2, 82, CONTROL_PANEL_WIDTH - 4, 20, &mygl.particles.ParticleSize, "Particle Size");
+	 sParticleSize.bounds(1, 25);
+
+	 SliderInput sParticleVariance(win.w() - CONTROL_PANEL_WIDTH + 2, 122, CONTROL_PANEL_WIDTH - 4, 20, &mygl.particles.ParticleSizeVar, "Particle Size Variance %");
+	 sParticleVariance.bounds(1, 100);
+
      win.end();
      win.resizable(mygl);
      win.show();

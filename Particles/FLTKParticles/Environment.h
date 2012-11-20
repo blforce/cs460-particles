@@ -4,11 +4,16 @@
 
 class CEnvironment
 {
+
+private:
+	void	initVariables();
+
 public:
 	CEnvironment();
 	CEnvironment(int  windowWidth_);
-	~CEnvironment(void);
 
 	int		windowWidth;
 	Vector	gravity;
+
+	
 };

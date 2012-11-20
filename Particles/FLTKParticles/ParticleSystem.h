@@ -19,7 +19,12 @@ public:
 	Vector	Position;
 	Vector	Direction;
 	float	Radius;
-	float	BirthRate;
+	double	BirthRate;
+
+	double	MaximumParticleLife;
+
+	double	ParticleSize;
+	double	ParticleSizeVar;
 
 
 private:

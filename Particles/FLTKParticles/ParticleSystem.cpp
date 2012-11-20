@@ -10,10 +10,10 @@ CParticleSystem::CParticleSystem(void)
 {
 	lastSpawnTime_ = clock();
 	BirthRate = SPAWN_PER_SECOND;
+	MaximumParticleLife = MAX_PARTICLE_LIFE;
+	ParticleSize = PARTICLE_SIZE;
+	ParticleSizeVar = PARTICLE_SIZE_VAR;
 }
-
-
-
 
 CParticleSystem::~CParticleSystem(void)
 {
@@ -36,32 +36,23 @@ void CParticleSystem::Render(CEnvironment *env, Vector camera)
 
 void CParticleSystem::Spawn(void)
 {
-	int spawnTarget = Math::ElapsedSeconds(lastSpawnTime_) * BirthRate;
-	//int spawnCount = 0;
-	//if( Math::ElapsedSeconds(lastSpawnTime_) > (1.0f / BirthRate) )
-	//for( int s = 0; s < spawnCount; s++)
-	//{
+	int spawnTarget = (int)(Math::ElapsedSeconds(lastSpawnTime_) * BirthRate);
+
 
 #pragma omp parallel for
-		for(int i = 0; i < MAX_PARTICLE_COUNT; i++)
+	for(int i = 0; i < MAX_PARTICLE_COUNT; i++)
+	{
+		if(spawnTarget <= 0 )
+				return;
+
+		// TODO: Pass spawn paramaters
+		if( !Particles[i].isAlive() )
 		{
+			Particles[i].Activate(this);
 
-			// TODO: Pass spawn paramaters
-			if( !Particles[i].isAlive() )
-			{
-				Particles[i].Activate();
+			lastSpawnTime_ = clock();
 
-				lastSpawnTime_ = clock();
-
-				//spawnCount++;
-				spawnTarget--;
-				if(spawnTarget <= 0 )
-					return;
-
-				/*if( spawnCount >= spawnTarget )
-					return;*/
-			}
+			spawnTarget--;
 		}
-
-	//}
+	}
 }

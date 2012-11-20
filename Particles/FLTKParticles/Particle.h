@@ -4,6 +4,7 @@
 #include "CustomMath.h"
 #include "Environment.h"
 
+
 class CParticle
 {
 public:
@@ -11,7 +12,7 @@ public:
 	~CParticle(void);
 
 
-	void	Activate(void);
+	void	Activate(void *system);
 	void	Render(CEnvironment *env, Vector camera, int time);
 
 	bool	isAlive(void);
